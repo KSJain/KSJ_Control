@@ -32,11 +32,19 @@ ControlDecision RangeController::update(
 
     if (!decision.inputValid)
     {
-        decision.action =
-            ControlAction::TurnOff;
+        if (!_outputStateKnown || _outputOn)
+        {
+            decision.action =
+                ControlAction::TurnOff;
 
-        _outputStateKnown = true;
-        _outputOn = false;
+            _outputStateKnown = true;
+            _outputOn = false;
+        }
+        else
+        {
+            decision.action =
+                ControlAction::Hold;
+        }
 
         return decision;
     }
